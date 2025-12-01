@@ -1,0 +1,2419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>体测通</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><defs><radialGradient id="a" cx="50%" cy="40%"><stop offset="0%" stop-color="white" stop-opacity="0.3"/><stop offset="100%" stop-color="white" stop-opacity="0"/></radialGradient></defs><rect width="100" height="20" fill="url(%23a)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-section {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 15px;
+            transition: color 0.3s ease;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 15px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f7fafc;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4facfe;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(79, 172, 254, 0.15), 0 8px 25px rgba(79, 172, 254, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 25px;
+            margin-top: 10px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 12px 18px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            flex: 1;
+            text-align: center;
+        }
+
+        .radio-option:hover {
+            background: #edf2f7;
+            border-color: #cbd5e0;
+            transform: translateY(-1px);
+        }
+
+        .radio-option input[type="radio"] {
+            width: auto;
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .radio-option input[type="radio"]:checked + span {
+            color: #4facfe;
+            font-weight: 600;
+        }
+
+        .radio-option:has(input[type="radio"]:checked) {
+            border-color: #4facfe;
+            background: #f0f8ff;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.2);
+        }
+
+        .section-title {
+            font-size: 1.4em;
+            color: #2d3748;
+            margin-bottom: 25px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #4facfe;
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 50%;
+            margin-right: 12px;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.3);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 17px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 8px 20px rgba(79, 172, 254, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results {
+            display: none;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            margin: 20px 30px 30px;
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid rgba(233, 236, 239, 0.5);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            backdrop-filter: blur(10px);
+        }
+
+        .results.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .score-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .score-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+
+        .score-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .score-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            border-color: rgba(79, 172, 254, 0.3);
+        }
+
+        .score-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .score-title {
+            font-size: 16px;
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .score-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .score-level {
+            padding: 6px 16px;
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .level-excellent { background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%); color: white; }
+        .level-good { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; }
+        .level-pass { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
+        .level-fail { background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); color: white; }
+
+        .total-score {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 35px;
+            border-radius: 18px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+        }
+
+        .total-score h3 {
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            opacity: 0.9;
+            font-weight: 600;
+        }
+
+        .total-score .score {
+            font-size: 4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .total-score .score::after {
+            content: '分';
+            font-size: 0.4em;
+            position: absolute;
+            top: 10px;
+            right: -50px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .suggestions {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border: 2px solid rgba(79, 172, 254, 0.1);
+        }
+
+        .suggestions h4 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+        }
+
+        .suggestions h4::before {
+            content: '💡';
+            margin-right: 12px;
+            font-size: 1.4em;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .suggestion-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            border-left: 6px solid #4facfe;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .suggestion-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(79, 172, 254, 0.05) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        .suggestion-item:hover {
+            transform: translateX(8px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .suggestion-item::after {
+            content: '💡';
+            margin-right: 12px;
+            font-size: 18px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .error {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error.show {
+            display: block;
+            animation: shake 0.5s ease;
+        }
+
+        .error-message {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #f5c6cb;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 8px 20px rgba(220, 53, 69, 0.15);
+            position: relative;
+            overflow: hidden;
+            font-weight: 500;
+        }
+
+        .error-message::before {
+            content: '⚠️';
+            margin-right: 12px;
+            font-size: 1.4em;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .error-message::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(220, 53, 69, 0.05) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        .input-error {
+            border-color: #dc3545 !important;
+            background-color: #fff5f5 !important;
+            box-shadow: 0 0 0 4px rgba(220, 53, 69, 0.15) !important;
+        }
+
+        .input-success {
+            border-color: #28a745 !important;
+            background-color: #f0fff4 !important;
+            box-shadow: 0 0 0 4px rgba(40, 167, 69, 0.15) !important;
+        }
+
+        .validation-message {
+            font-size: 13px;
+            margin-top: 6px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: none;
+            font-weight: 500;
+        }
+
+        .validation-message.error {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24;
+            display: block;
+            border: 1px solid #f5c6cb;
+        }
+
+        .validation-message.success {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+            display: block;
+            border: 1px solid #c3e6cb;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .input-icon.show {
+            opacity: 1;
+        }
+
+        .input-icon.success {
+            color: #28a745;
+        }
+
+        .input-icon.error {
+            color: #dc3545;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4facfe;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+            
+            .form-section {
+                padding: 20px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 训练计划样式 */
+        .training-plan-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .training-phase {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .day-training-item {
+            background: rgba(255,255,255,0.95);
+            color: #2d3748;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 8px 0;
+            border-left: 4px solid #4facfe;
+            transition: all 0.3s ease;
+        }
+
+        .day-training-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .rest-day-item {
+            background: rgba(72,187,120,0.1);
+            border-left-color: #48bb78;
+        }
+
+        .training-action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .training-action-buttons button {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .training-action-buttons button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏃‍♂️ 体测通</h1>
+            <p>个性化体测训练规划助手
+                By Team跃动引擎</p>
+        </div>
+
+        <div class="form-section">
+            <div class="section-title">基本信息</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>性别 *</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="gender" value="male" required>
+                            <span>男生</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="gender" value="female" required>
+                            <span>女生</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="age">年龄 *</label>
+                    <input type="number" id="age" name="age" min="18" max="25" required>
+                    <div class="error" id="age-error"></div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="height">身高 (cm) *</label>
+                    <input type="number" id="height" name="height" min="140" max="220" step="0.1" required>
+                    <div class="error" id="height-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="weight">体重 (kg) *</label>
+                    <input type="number" id="weight" name="weight" min="30" max="150" step="0.1" required>
+                    <div class="error" id="weight-error"></div>
+                </div>
+            </div>
+
+            <div class="section-title">体测项目</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="lungCapacity">肺活量 (ml) *</label>
+                    <input type="number" id="lungCapacity" name="lungCapacity" min="1000" max="8000" required>
+                    <div class="error" id="lungCapacity-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="sitAndReach">坐位体前屈 (cm) *</label>
+                    <input type="number" id="sitAndReach" name="sitAndReach" min="-30" max="50" step="0.1" required>
+                    <div class="error" id="sitAndReach-error"></div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="enduranceRun">1000米跑(男)/800米跑(女) (分:秒) *</label>
+                    <input type="text" id="enduranceRun" name="enduranceRun" placeholder="例如: 4:30" required>
+                    <div class="error" id="enduranceRun-error"></div>
+                </div>
+                <div class="form-group" id="strengthGroup">
+                    <label for="strengthTest">引体向上(男)/仰卧起坐(女) (次) *</label>
+                    <input type="number" id="strengthTest" name="strengthTest" min="0" max="100" required>
+                    <div class="error" id="strengthTest-error"></div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="standingJump">立定跳远 (cm) *</label>
+                    <input type="number" id="standingJump" name="standingJump" min="100" max="400" required>
+                    <div class="error" id="standingJump-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="sprint50">50米跑 (秒) *</label>
+                    <input type="number" id="sprint50" name="sprint50" min="5" max="20" step="0.01" required>
+                    <div class="error" id="sprint50-error"></div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button type="button" class="btn" onclick="calculateScores()">🧮 计算成绩</button>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>正在计算成绩...</p>
+            </div>
+        </div>
+
+        <div class="results" id="results">
+            <div class="total-score">
+                <h3>总成绩</h3>
+                <div class="score" id="totalScore">0</div>
+                <div class="score-level level-good" id="totalLevel">良好</div>
+            </div>
+
+            <div class="score-grid" id="scoreGrid">
+                <!-- 单项成绩将在这里显示 -->
+            </div>
+
+            <div class="suggestions">
+                <h4>💡 改进建议</h4>
+                <div id="suggestionsList">
+                    <!-- 建议将在这里显示 -->
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button type="button" class="btn" onclick="showTrainingPlanSection()">🎯 制定训练计划</button>
+            </div>
+        </div>
+
+        <!-- 目标设定和训练计划部分 -->
+        <div class="form-section" id="trainingPlanSection" style="display: none;">
+            <div class="section-title">🎯 目标设定</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="targetScore">目标总成绩 (分)</label>
+                    <input type="number" id="targetScore" name="targetScore" min="60" max="100" placeholder="例如: 85">
+                    <div class="error" id="targetScore-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="examDays">距离考试 (天)</label>
+                    <input type="number" id="examDays" name="examDays" min="7" max="365" placeholder="例如: 30">
+                    <div class="error" id="examDays-error"></div>
+                </div>
+            </div>
+
+            <div class="section-title">📊 各项目标成绩</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="targetLungCapacity">目标肺活量 (ml)</label>
+                    <input type="number" id="targetLungCapacity" name="targetLungCapacity" min="1000" max="8000">
+                </div>
+                <div class="form-group">
+                    <label for="targetSitAndReach">目标坐位体前屈 (cm)</label>
+                    <input type="number" id="targetSitAndReach" name="targetSitAndReach" min="-30" max="50" step="0.1">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="targetEnduranceRun">目标耐力跑 (分:秒)</label>
+                    <input type="text" id="targetEnduranceRun" name="targetEnduranceRun" placeholder="例如: 4:00">
+                </div>
+                <div class="form-group">
+                    <label for="targetStrengthTest">目标力量测试 (次)</label>
+                    <input type="number" id="targetStrengthTest" name="targetStrengthTest" min="0" max="100">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="targetStandingJump">目标立定跳远 (cm)</label>
+                    <input type="number" id="targetStandingJump" name="targetStandingJump" min="100" max="400">
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button type="button" class="btn" onclick="generateTrainingPlan()">🏃‍♂️ 生成训练计划</button>
+            </div>
+
+            <div class="loading" id="trainingLoading" style="display: none;">
+                <div class="spinner"></div>
+                <p>正在生成个性化训练方案...</p>
+            </div>
+        </div>
+
+        <!-- 训练计划结果显示 -->
+        <div class="results" id="trainingResults" style="display: none;">
+            <div class="total-score">
+                <h3>📅 个性化训练计划</h3>
+                <div id="trainingPlanSummary"></div>
+            </div>
+
+            <div id="trainingPlanDetails">
+                <!-- 训练计划详细内容将在这里显示 -->
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button type="button" class="btn" onclick="exportTrainingPlan()">📥 导出训练计划</button>
+                <button type="button" class="btn" onclick="printTrainingPlan()" style="margin-left: 15px;">🖨️ 打印计划</button>
+                <button type="button" class="btn" onclick="showTrainingPlanHistory()" style="margin-left: 15px;">📚 历史记录</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 评分标准数据 - 严格按照《国家学生体质健康标准》(2014年修订)
+        const scoreStandards = {
+            // BMI标准 (18-22岁) - 大学阶段
+            bmi: {
+                male: {
+                    excellent: { min: 17.9, max: 23.9, score: 100 },  // 正常范围
+                    good: { min: 24.0, max: 27.9, score: 80 },      // 超重
+                    pass: { min: 28.0, max: 32.9, score: 60 },      // 肥胖
+                    fail: { min: 0, max: 17.8, score: 40 }          // 偏瘦
+                },
+                female: {
+                    excellent: { min: 17.2, max: 23.9, score: 100 }, // 正常范围
+                    good: { min: 24.0, max: 27.9, score: 80 },       // 超重
+                    pass: { min: 28.0, max: 32.9, score: 60 },       // 肥胖
+                    fail: { min: 0, max: 17.1, score: 40 }             // 偏瘦
+                }
+            },
+            // 肺活量标准 (ml) - 大学阶段(18-22岁)
+            lungCapacity: {
+                male: {
+                    18: { excellent: 5040, good: 4540, pass: 3300, fail: 2300 },
+                    19: { excellent: 5140, good: 4640, pass: 3400, fail: 2400 },
+                    20: { excellent: 5240, good: 4740, pass: 3500, fail: 2500 },
+                    21: { excellent: 5340, good: 4840, pass: 3600, fail: 2600 },
+                    22: { excellent: 5440, good: 4940, pass: 3700, fail: 2700 }
+                },
+                female: {
+                    18: { excellent: 3340, good: 2940, pass: 2050, fail: 1500 },
+                    19: { excellent: 3440, good: 3040, pass: 2150, fail: 1600 },
+                    20: { excellent: 3540, good: 3140, pass: 2250, fail: 1700 },
+                    21: { excellent: 3640, good: 3240, pass: 2350, fail: 1800 },
+                    22: { excellent: 3740, good: 3340, pass: 2450, fail: 1900 }
+                }
+            },
+            // 坐位体前屈标准 (cm) - 大学阶段
+            sitAndReach: {
+                male: {
+                    excellent: { min: 19.2, score: 100 },  // 优秀
+                    good: { min: 12.8, score: 80 },       // 良好
+                    pass: { min: 6.0, score: 60 },        // 及格
+                    fail: { min: -30, score: 40 }          // 不及格
+                },
+                female: {
+                    excellent: { min: 19.3, score: 100 },  // 优秀
+                    good: { min: 13.8, score: 80 },       // 良好
+                    pass: { min: 7.5, score: 60 },        // 及格
+                    fail: { min: -30, score: 40 }          // 不及格
+                }
+            },
+            // 耐力跑标准 (秒) - 1000米(男)/800米(女)
+            enduranceRun: {
+                male: { // 1000米
+                    excellent: { max: 214, score: 100 }, // 3:34
+                    good: { max: 234, score: 80 },      // 3:54
+                    pass: { max: 259, score: 60 },      // 4:19
+                    fail: { max: 330, score: 40 }      // 5:30
+                },
+                female: { // 800米
+                    excellent: { max: 194, score: 100 }, // 3:14
+                    good: { max: 207, score: 80 },      // 3:27
+                    pass: { max: 224, score: 60 },    // 3:44
+                    fail: { max: 280, score: 40 }     // 4:40
+                }
+            },
+            // 50米短跑标准 (秒)
+            sprint50: {
+                male: {
+                    excellent: { max: 7.2, score: 100 },
+                    good: { max: 7.6, score: 80 },
+                    pass: { max: 8.2, score: 60 },
+                    fail: { max: 10.0, score: 40 }
+                },
+                female: {
+                    excellent: { max: 8.5, score: 100 },
+                    good: { max: 9.0, score: 80 },
+                    pass: { max: 9.8, score: 60 },
+                    fail: { max: 12.0, score: 40 }
+                }
+            },
+            // 力量测试标准
+            strengthTest: {
+                male: { // 引体向上
+                    excellent: { min: 17, score: 100 },  // 优秀
+                    good: { min: 15, score: 80 },       // 良好
+                    pass: { min: 10, score: 60 },        // 及格
+                    fail: { min: 0, score: 40 }          // 不及格
+                },
+                female: { // 仰卧起坐(1分钟)
+                    excellent: { min: 52, score: 100 },  // 优秀
+                    good: { min: 46, score: 80 },       // 良好
+                    pass: { min: 26, score: 60 },        // 及格
+                    fail: { min: 0, score: 40 }          // 不及格
+                }
+            },
+            // 立定跳远标准 (cm) - 大学阶段
+            standingJump: {
+                male: {
+                    excellent: { min: 273, score: 100 },  // 优秀
+                    good: { min: 263, score: 80 },       // 良好
+                    pass: { min: 208, score: 60 },       // 及格
+                    fail: { min: 100, score: 40 }       // 不及格
+                },
+                female: {
+                    excellent: { min: 207, score: 100 },  // 优秀
+                    good: { min: 195, score: 80 },       // 良好
+                    pass: { min: 151, score: 60 },       // 及格
+                    fail: { min: 100, score: 40 }       // 不及格
+                }
+            }
+        };
+
+        // 工具函数
+        function timeToSeconds(timeStr) {
+            const parts = timeStr.split(':');
+            if (parts.length !== 2) return null;
+            const minutes = parseInt(parts[0]);
+            const seconds = parseInt(parts[1]);
+            if (isNaN(minutes) || isNaN(seconds) || seconds >= 60) return null;
+            return minutes * 60 + seconds;
+        }
+
+        function isValidTime(timeStr) {
+            const timePattern = /^\d{1,2}:\d{2}$/;
+            if (!timePattern.test(timeStr)) return false;
+            const seconds = timeToSeconds(timeStr);
+            return seconds !== null;
+        }
+
+        function getBMIScore(bmi, gender) {
+            const standards = scoreStandards.bmi[gender];
+            if (bmi >= standards.excellent.min && bmi <= standards.excellent.max) {
+                return { score: 100, level: 'excellent' };
+            } else if ((bmi >= standards.good.min && bmi <= standards.good.max) || 
+                       (bmi >= 24.0 && bmi <= 27.9)) { // 超重范围
+                return { score: 80, level: 'good' };
+            } else if (bmi >= standards.pass.min && bmi <= standards.pass.max) {
+                return { score: 60, level: 'pass' };
+            } else {
+                return { score: 40, level: 'fail' };
+            }
+        }
+
+        function getSitAndReachScore(distance, gender) {
+            const standards = scoreStandards.sitAndReach[gender];
+            if (distance >= standards.excellent.min) {
+                return { score: 100, level: 'excellent' };
+            } else if (distance >= standards.good.min) {
+                // 在良好到优秀之间线性插值
+                const score = linearInterpolation(distance, standards.good.min, 80, standards.excellent.min, 100);
+                return { score, level: 'good' };
+            } else if (distance >= standards.pass.min) {
+                // 在及格到良好之间线性插值
+                const score = linearInterpolation(distance, standards.pass.min, 60, standards.good.min, 80);
+                return { score, level: 'pass' };
+            } else {
+                // 在不及格到及格之间线性插值，最低40分
+                const score = Math.max(40, linearInterpolation(distance, standards.fail.min, 40, standards.pass.min, 60));
+                return { score, level: 'fail' };
+            }
+        }
+
+        function getEnduranceRunScore(seconds, gender) {
+            const standards = scoreStandards.enduranceRun[gender];
+            if (seconds <= standards.excellent.max) {
+                return { score: 100, level: 'excellent' };
+            } else if (seconds <= standards.good.max) {
+                // 在良好到优秀之间线性插值（时间越短分数越高）
+                const score = linearInterpolation(seconds, standards.good.max, 80, standards.excellent.max, 100);
+                return { score, level: 'good' };
+            } else if (seconds <= standards.pass.max) {
+                // 在及格到良好之间线性插值
+                const score = linearInterpolation(seconds, standards.pass.max, 60, standards.good.max, 80);
+                return { score, level: 'pass' };
+            } else {
+                // 在不及格到及格之间线性插值，最低40分
+                const score = Math.max(40, linearInterpolation(seconds, standards.fail.max, 40, standards.pass.max, 60));
+                return { score, level: 'fail' };
+            }
+        }
+
+        // 50米短跑评分
+        function getSprint50Score(seconds, gender) {
+            const standards = scoreStandards.sprint50[gender];
+            if (seconds <= standards.excellent.max) {
+                return { score: 100, level: 'excellent' };
+            } else if (seconds <= standards.good.max) {
+                const score = linearInterpolation(seconds, standards.good.max, 80, standards.excellent.max, 100);
+                return { score, level: 'good' };
+            } else if (seconds <= standards.pass.max) {
+                const score = linearInterpolation(seconds, standards.pass.max, 60, standards.good.max, 80);
+                return { score, level: 'pass' };
+            } else {
+                const score = Math.max(40, linearInterpolation(seconds, standards.fail.max, 40, standards.pass.max, 60));
+                return { score, level: 'fail' };
+            }
+        }
+
+        function getStrengthTestScore(count, gender) {
+            const standards = scoreStandards.strengthTest[gender];
+            if (count >= standards.excellent.min) {
+                return { score: 100, level: 'excellent' };
+            } else if (count >= standards.good.min) {
+                // 在良好到优秀之间线性插值
+                const score = linearInterpolation(count, standards.good.min, 80, standards.excellent.min, 100);
+                return { score, level: 'good' };
+            } else if (count >= standards.pass.min) {
+                // 在及格到良好之间线性插值
+                const score = linearInterpolation(count, standards.pass.min, 60, standards.good.min, 80);
+                return { score, level: 'pass' };
+            } else {
+                // 在不及格到及格之间线性插值，最低40分
+                const score = Math.max(40, linearInterpolation(count, standards.fail.min, 40, standards.pass.min, 60));
+                return { score, level: 'fail' };
+            }
+        }
+
+        function getStandingJumpScore(distance, gender) {
+            const standards = scoreStandards.standingJump[gender];
+            if (distance >= standards.excellent.min) {
+                return { score: 100, level: 'excellent' };
+            } else if (distance >= standards.good.min) {
+                // 在良好到优秀之间线性插值
+                const score = linearInterpolation(distance, standards.good.min, 80, standards.excellent.min, 100);
+                return { score, level: 'good' };
+            } else if (distance >= standards.pass.min) {
+                // 在及格到良好之间线性插值
+                const score = linearInterpolation(distance, standards.pass.min, 60, standards.good.min, 80);
+                return { score, level: 'pass' };
+            } else {
+                // 在不及格到及格之间线性插值，最低40分
+                const score = Math.max(40, linearInterpolation(distance, standards.fail.min, 40, standards.pass.min, 60));
+                return { score, level: 'fail' };
+            }
+        }
+
+        // 线性插值函数 - 用于精确计算中间值得分
+        function linearInterpolation(x, x1, y1, x2, y2) {
+            if (x <= x1) return y1;
+            if (x >= x2) return y2;
+            return Math.round(y1 + (x - x1) * (y2 - y1) / (x2 - x1));
+        }
+
+        // 获取精确肺活量得分
+        function getLungCapacityScore(capacity, gender, age) {
+            const ageStandards = scoreStandards.lungCapacity[gender];
+            const ageKey = Math.min(22, Math.max(18, Math.floor(age))); // 限制在18-22岁范围内
+            const standards = ageStandards[ageKey];
+            
+            if (capacity >= standards.excellent) {
+                return { score: 100, level: 'excellent' };
+            } else if (capacity >= standards.good) {
+                // 在良好到优秀之间线性插值
+                const score = linearInterpolation(capacity, standards.good, 80, standards.excellent, 100);
+                return { score, level: 'good' };
+            } else if (capacity >= standards.pass) {
+                // 在及格到良好之间线性插值
+                const score = linearInterpolation(capacity, standards.pass, 60, standards.good, 80);
+                return { score, level: 'pass' };
+            } else {
+                // 在不及格到及格之间线性插值，最低40分
+                const score = Math.max(40, linearInterpolation(capacity, standards.fail, 40, standards.pass, 60));
+                return { score, level: 'fail' };
+            }
+        }
+
+        function getLevelText(level) {
+            const levelMap = {
+                'excellent': '优秀',
+                'good': '良好',
+                'pass': '及格',
+                'fail': '不及格'
+            };
+            return levelMap[level];
+        }
+
+        function getLevelClass(level) {
+            return `level-${level}`;
+        }
+
+        function validateInput() {
+            let isValid = true;
+            const errors = document.querySelectorAll('.error');
+            errors.forEach(error => error.classList.remove('show'));
+
+            // 验证性别
+            const gender = document.querySelector('input[name="gender"]:checked');
+            if (!gender) {
+                alert('请选择性别');
+                isValid = false;
+            }
+
+            // 验证年龄
+            const age = document.getElementById('age').value;
+            if (!age || age < 18 || age > 25) {
+                document.getElementById('age-error').textContent = '年龄必须在18-25岁之间';
+                document.getElementById('age-error').classList.add('show');
+                isValid = false;
+            } else {
+                clearFieldValidation('age');
+            }
+
+            // 验证身高
+            const height = document.getElementById('height').value;
+            if (!height || height < 140 || height > 220) {
+                document.getElementById('height-error').textContent = '身高必须在140-220cm之间';
+                document.getElementById('height-error').classList.add('show');
+                isValid = false;
+            } else {
+                clearFieldValidation('height');
+            }
+
+            // 验证体重
+            const weight = document.getElementById('weight').value;
+            if (!weight || weight < 30 || weight > 150) {
+                document.getElementById('weight-error').textContent = '体重必须在30-150kg之间';
+                document.getElementById('weight-error').classList.add('show');
+                isValid = false;
+            } else {
+                clearFieldValidation('weight');
+            }
+
+            // 验证肺活量
+            const lungCapacity = document.getElementById('lungCapacity').value;
+            if (!lungCapacity || lungCapacity < 1000 || lungCapacity > 8000) {
+                document.getElementById('lungCapacity-error').textContent = '肺活量必须在1000-8000ml之间';
+                document.getElementById('lungCapacity-error').classList.add('show');
+                isValid = false;
+            } else {
+                clearFieldValidation('lungCapacity');
+            }
+
+            // 验证坐位体前屈
+            const sitAndReach = document.getElementById('sitAndReach').value;
+            if (sitAndReach === '' || sitAndReach < -30 || sitAndReach > 50) {
+                document.getElementById('sitAndReach-error').textContent = '坐位体前屈必须在-30到50cm之间';
+                document.getElementById('sitAndReach-error').classList.add('show');
+                isValid = false;
+            } else {
+                clearFieldValidation('sitAndReach');
+            }
+
+            // 验证耐力跑时间格式
+            const enduranceRun = document.getElementById('enduranceRun').value;
+            if (!isValidTime(enduranceRun)) {
+                document.getElementById('enduranceRun-error').textContent = '请输入正确的时间格式（如：4:30）';
+                document.getElementById('enduranceRun-error').classList.add('show');
+                isValid = false;
+            } else {
+                const seconds = timeToSeconds(enduranceRun);
+                if (seconds === null) {
+                    document.getElementById('enduranceRun-error').textContent = '请输入有效的时间';
+                    document.getElementById('enduranceRun-error').classList.add('show');
+                    isValid = false;
+                } else {
+                    clearFieldValidation('enduranceRun');
+                }
+            }
+
+            // 验证力量测试
+            const strengthTest = document.getElementById('strengthTest').value;
+            if (!strengthTest || strengthTest < 0 || strengthTest > 100) {
+                document.getElementById('strengthTest-error').textContent = '次数必须在0-100之间';
+                document.getElementById('strengthTest-error').classList.add('show');
+                isValid = false;
+            } else {
+                clearFieldValidation('strengthTest');
+            }
+
+            // 验证50米跑
+            const sprint50Val = document.getElementById('sprint50').value;
+            if (!sprint50Val || sprint50Val < 5 || sprint50Val > 20) {
+                document.getElementById('sprint50-error').textContent = '50米跑必须在5-20秒之间';
+                document.getElementById('sprint50-error').classList.add('show');
+                isValid = false;
+            } else {
+                clearFieldValidation('sprint50');
+            }
+
+            // 验证立定跳远
+            const standingJump = document.getElementById('standingJump').value;
+            if (!standingJump || standingJump < 100 || standingJump > 400) {
+                document.getElementById('standingJump-error').textContent = '立定跳远必须在100-400cm之间';
+                document.getElementById('standingJump-error').classList.add('show');
+                isValid = false;
+            } else {
+                clearFieldValidation('standingJump');
+            }
+
+            return isValid;
+        }
+
+        function clearFieldValidation(fieldId) {
+            const field = document.getElementById(fieldId);
+            const formGroup = field.closest('.form-group') || field.closest('.input-group');
+            
+            field.classList.remove('input-error', 'input-success');
+            
+            const validationMsg = formGroup.querySelector('.validation-message');
+            if (validationMsg) {
+                validationMsg.remove();
+            }
+            
+            const inputIcon = formGroup.querySelector('.input-icon');
+            if (inputIcon) {
+                inputIcon.remove();
+            }
+        }
+
+        function calculateScores() {
+            if (!validateInput()) {
+                return;
+            }
+
+            // 显示加载状态
+            document.getElementById('loading').classList.add('show');
+            
+            setTimeout(() => {
+                // 获取输入数据
+                const gender = document.querySelector('input[name="gender"]:checked').value;
+                const age = parseInt(document.getElementById('age').value);
+                const height = parseFloat(document.getElementById('height').value);
+                const weight = parseFloat(document.getElementById('weight').value);
+                const lungCapacity = parseInt(document.getElementById('lungCapacity').value);
+                const sitAndReach = parseFloat(document.getElementById('sitAndReach').value);
+                const enduranceRunTime = document.getElementById('enduranceRun').value;
+                const strengthTest = parseInt(document.getElementById('strengthTest').value);
+                const standingJump = parseInt(document.getElementById('standingJump').value);
+                const sprint50 = parseFloat(document.getElementById('sprint50').value);
+
+                // 计算各项成绩
+                const bmi = weight / Math.pow(height / 100, 2);
+                const enduranceRunSeconds = timeToSeconds(enduranceRunTime);
+
+                const results = [
+                    {
+                        name: '50米跑',
+                        value: sprint50,
+                        unit: '秒',
+                        ...getSprint50Score(sprint50, gender)
+                    },
+                    {
+                        name: 'BMI指数',
+                        value: bmi.toFixed(1),
+                        unit: 'kg/m²',
+                        ...getBMIScore(bmi, gender)
+                    },
+                    {
+                        name: '肺活量',
+                        value: lungCapacity,
+                        unit: 'ml',
+                        ...getLungCapacityScore(lungCapacity, gender, age)
+                    },
+                    {
+                        name: '坐位体前屈',
+                        value: sitAndReach,
+                        unit: 'cm',
+                        ...getSitAndReachScore(sitAndReach, gender)
+                    },
+                    {
+                        name: '耐力跑',
+                        value: enduranceRunTime,
+                        unit: '时间',
+                        ...getEnduranceRunScore(enduranceRunSeconds, gender)
+                    },
+                    {
+                        name: gender === 'male' ? '引体向上' : '仰卧起坐',
+                        value: strengthTest,
+                        unit: '次',
+                        ...getStrengthTestScore(strengthTest, gender)
+                    },
+                    {
+                        name: '立定跳远',
+                        value: standingJump,
+                        unit: 'cm',
+                        ...getStandingJumpScore(standingJump, gender)
+                    }
+                ];
+
+                // 加权总分
+                const weights = {
+                    '50米跑': 20,
+                    '耐力跑': 20,
+                    'BMI指数': 15,
+                    '肺活量': 15,
+                    '坐位体前屈': 10,
+                    '立定跳远': 10
+                };
+                const totalScore = Math.round(results.reduce((sum, result) => {
+                    let w = weights[result.name] ?? 0;
+                    if (w === 0 && (result.name.includes('引体向上') || result.name.includes('仰卧起坐'))) {
+                        w = 10;
+                    }
+                    result.weight = w;
+                    result.weightedScore = +(result.score * w / 100).toFixed(1);
+                    return sum + result.score * w / 100;
+                }, 0));
+                const totalLevel = totalScore >= 90 ? 'excellent' : 
+                                 totalScore >= 80 ? 'good' : 
+                                 totalScore >= 60 ? 'pass' : 'fail';
+
+                // 显示结果
+                displayResults(results, totalScore, totalLevel);
+
+                // 隐藏加载状态
+                document.getElementById('loading').classList.remove('show');
+                document.getElementById('results').classList.add('show');
+            }, 1000);
+        }
+
+        function displayResults(results, totalScore, totalLevel) {
+            // 显示总分
+            document.getElementById('totalScore').textContent = totalScore;
+            document.getElementById('totalLevel').textContent = getLevelText(totalLevel);
+            document.getElementById('totalLevel').className = `score-level ${getLevelClass(totalLevel)}`;
+
+            // 显示单项成绩
+            const scoreGrid = document.getElementById('scoreGrid');
+            scoreGrid.innerHTML = '';
+            results.forEach(result => {
+                const card = document.createElement('div');
+                card.className = 'score-card';
+                card.innerHTML = `
+                    <div class="score-title">${result.name}</div>
+                    <div class="score-value">${result.value}</div>
+                    <div class="score-level ${getLevelClass(result.level)}">${getLevelText(result.level)}</div>
+                    <div style="font-size: 12px; color: #666; margin-top: 5px;">${result.score}分</div>
+                    <div style=\"font-size: 12px; color: #666;\">权重 ${result.weight || 0}% · 加权 ${result.weightedScore || 0}分</div>
+                `;
+                scoreGrid.appendChild(card);
+            });
+
+            // 生成建议
+            generateSuggestions(results, totalLevel);
+        }
+
+        function generateSuggestions(results, totalLevel) {
+            const suggestions = [];
+            const weakItems = results.filter(result => result.level === 'fail' || result.level === 'pass');
+            
+            if (weakItems.length === 0) {
+                suggestions.push('恭喜！您的各项体测成绩都很优秀，请继续保持良好的运动习惯。');
+            } else {
+                suggestions.push('以下是针对您体测情况的改进建议：');
+                
+                weakItems.forEach(item => {
+                    if (item.name === 'BMI指数') {
+                        if (item.value < 18.5) {
+                            suggestions.push('您的BMI偏低，建议增加营养摄入，适当进行力量训练增加肌肉量。');
+                        } else {
+                            suggestions.push('您的BMI偏高，建议控制饮食，增加有氧运动，每周至少运动3-4次。');
+                        }
+                    } else if (item.name === '肺活量') {
+                        suggestions.push('肺活量有待提高，建议进行有氧运动如慢跑、游泳，每天深呼吸练习。');
+                    } else if (item.name === '坐位体前屈') {
+                        suggestions.push('柔韧性需要改善，建议每天进行拉伸运动，特别是腿部和腰部拉伸。');
+                    } else if (item.name === '耐力跑') {
+                        suggestions.push('耐力跑成绩需要提升，建议循序渐进地进行长跑训练，每周增加跑步距离。');
+                    } else if (item.name.includes('引体向上') || item.name.includes('仰卧起坐')) {
+                        suggestions.push('力量训练需要加强，建议进行针对性的力量练习，如俯卧撑、平板支撑等。');
+                    } else if (item.name === '立定跳远') {
+                        suggestions.push('爆发力需要提升，建议进行跳跃训练，如深蹲跳、台阶跳等。');
+                    }
+                });
+            }
+
+            // 通用建议
+            suggestions.push('建议制定科学的训练计划，每周至少进行3-4次体育锻炼，每次30分钟以上。');
+            suggestions.push('运动前要做好热身，运动后进行适当的拉伸放松。');
+            suggestions.push('保持良好的作息习惯，保证充足的睡眠，合理饮食。');
+
+            // 显示建议
+            const suggestionsList = document.getElementById('suggestionsList');
+            suggestionsList.innerHTML = '';
+            suggestions.forEach(suggestion => {
+                const item = document.createElement('div');
+                item.className = 'suggestion-item';
+                item.textContent = suggestion;
+                suggestionsList.appendChild(item);
+            });
+        }
+
+        // 性别切换时更新标签
+        document.querySelectorAll('input[name="gender"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const strengthLabel = document.querySelector('#strengthGroup label');
+                const enduranceLabel = document.querySelector('label[for="enduranceRun"]');
+                
+                if (this.value === 'male') {
+                    strengthLabel.textContent = '引体向上(男) (次) *';
+                    enduranceLabel.textContent = '1000米跑(男) (分:秒) *';
+                } else {
+                    strengthLabel.textContent = '仰卧起坐(女) (次) *';
+                    enduranceLabel.textContent = '800米跑(女) (分:秒) *';
+                }
+            });
+        });
+
+        // 实时输入验证
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('input', function() {
+                const error = document.getElementById(this.id + '-error');
+                if (error) {
+                    error.classList.remove('show');
+                }
+            });
+        });
+
+        document.getElementById('enduranceRun').addEventListener('input', function() {
+            document.getElementById('enduranceRun-error').classList.remove('show');
+        });
+
+        // 页面加载完成后添加实时验证
+        document.addEventListener('DOMContentLoaded', function() {
+            addRealtimeValidation();
+
+            // 添加性别切换时的动画效果
+            const genderRadios = document.querySelectorAll('input[name="gender"]');
+            genderRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    // 添加切换动画
+                    const radioOptions = document.querySelectorAll('.radio-option');
+                    radioOptions.forEach(option => {
+                        option.style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                            option.style.transform = 'scale(1)';
+                        }, 150);
+                    });
+                });
+            });
+        });
+
+        // 添加实时验证事件监听器
+        function addRealtimeValidation() {
+            const fields = ['height', 'weight', 'lungCapacity', 'sitAndReach', 'enduranceRun', 'strengthTest', 'standingJump', 'sprint50'];
+            
+            fields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    // 添加输入事件监听
+                    field.addEventListener('input', function() {
+                        validateField(fieldId);
+                    });
+                    
+                    // 添加失去焦点事件监听
+                    field.addEventListener('blur', function() {
+                        validateField(fieldId);
+                    });
+                }
+            });
+        }
+
+        // 验证单个字段
+        function validateField(fieldId) {
+            const field = document.getElementById(fieldId);
+            const value = field.value.trim();
+            
+            if (!value) {
+                clearFieldValidation(fieldId);
+                return;
+            }
+            
+            let isValid = true;
+            let errorMessage = '';
+            
+            switch (fieldId) {
+                case 'height':
+                    const height = parseFloat(value);
+                    if (isNaN(height) || height < 100 || height > 250) {
+                        isValid = false;
+                        errorMessage = '身高必须在100-250cm之间';
+                    }
+                    break;
+                    
+                case 'weight':
+                    const weight = parseFloat(value);
+                    if (isNaN(weight) || weight < 30 || weight > 200) {
+                        isValid = false;
+                        errorMessage = '体重必须在30-200kg之间';
+                    }
+                    break;
+                    
+                case 'lungCapacity':
+                    const lungCapacity = parseFloat(value);
+                    if (isNaN(lungCapacity) || lungCapacity < 1000 || lungCapacity > 8000) {
+                        isValid = false;
+                        errorMessage = '肺活量必须在1000-8000ml之间';
+                    }
+                    break;
+                    
+                case 'sitAndReach':
+                    const sitAndReach = parseFloat(value);
+                    if (isNaN(sitAndReach) || sitAndReach < -30 || sitAndReach > 50) {
+                        isValid = false;
+                        errorMessage = '坐位体前屈必须在-30到50cm之间';
+                    }
+                    break;
+                    
+                case 'enduranceRun':
+                    if (!isValidTime(value)) {
+                        isValid = false;
+                        errorMessage = '时间格式错误，请输入如"4:30"的格式';
+                    }
+                    break;
+                    
+                case 'strengthTest':
+                    const strengthTest = parseInt(value);
+                    if (isNaN(strengthTest) || strengthTest < 0 || strengthTest > 100) {
+                        isValid = false;
+                        errorMessage = '力量测试次数必须在0-100之间';
+                    }
+                    break;
+                    
+                case 'standingJump':
+                    const standingJump = parseFloat(value);
+                    if (isNaN(standingJump) || standingJump < 50 || standingJump > 400) {
+                        isValid = false;
+                        errorMessage = '立定跳远必须在50-400cm之间';
+                    }
+                    break;
+                case 'sprint50':
+                    const sprint50 = parseFloat(value);
+                    if (isNaN(sprint50) || sprint50 < 5 || sprint50 > 20) {
+                        isValid = false;
+                        errorMessage = '50米跑必须在5-20秒之间';
+                    }
+                    break;
+            }
+            
+            if (isValid) {
+                showFieldSuccess(fieldId);
+            } else {
+                showFieldError(fieldId, errorMessage);
+            }
+        }
+
+        function showFieldSuccess(fieldId) {
+            const field = document.getElementById(fieldId);
+            const formGroup = field.closest('.form-group') || field.closest('.input-group');
+            
+            field.classList.remove('input-error');
+            field.classList.add('input-success');
+            
+            // 添加成功图标
+            let icon = formGroup.querySelector('.input-icon');
+            if (!icon) {
+                icon = document.createElement('div');
+                icon.className = 'input-icon';
+                formGroup.appendChild(icon);
+            }
+            icon.className = 'input-icon show success';
+            icon.innerHTML = '✓';
+            
+            // 添加成功消息
+            let msg = formGroup.querySelector('.validation-message');
+            if (!msg) {
+                msg = document.createElement('div');
+                msg.className = 'validation-message';
+                formGroup.appendChild(msg);
+            }
+            msg.className = 'validation-message success';
+            msg.textContent = '输入正确';
+        }
+
+        function showFieldError(fieldId, errorMessage) {
+            const field = document.getElementById(fieldId);
+            const formGroup = field.closest('.form-group') || field.closest('.input-group');
+            
+            field.classList.remove('input-success');
+            field.classList.add('input-error');
+            
+            // 添加错误图标
+            let icon = formGroup.querySelector('.input-icon');
+            if (!icon) {
+                icon = document.createElement('div');
+                icon.className = 'input-icon';
+                formGroup.appendChild(icon);
+            }
+            icon.className = 'input-icon show error';
+            icon.innerHTML = '✗';
+            
+            // 添加错误消息
+            let msg = formGroup.querySelector('.validation-message');
+            if (!msg) {
+                msg = document.createElement('div');
+                msg.className = 'validation-message';
+                formGroup.appendChild(msg);
+            }
+            msg.className = 'validation-message error';
+            msg.textContent = errorMessage;
+        }
+
+        // 训练计划相关函数
+        function showTrainingPlanSection() {
+            const results = document.getElementById('results');
+            const trainingSection = document.getElementById('trainingPlanSection');
+            
+            // 显示训练计划部分
+            trainingSection.style.display = 'block';
+            trainingSection.scrollIntoView({ behavior: 'smooth' });
+            
+            // 自动填充建议的目标值
+            autoFillTargetValues();
+        }
+
+        function autoFillTargetValues() {
+            // 获取当前成绩
+            const currentScores = JSON.parse(localStorage.getItem('currentScores') || '{}');
+            const currentTotal = parseInt(document.getElementById('totalScore').textContent);
+            
+            // 建议目标成绩比当前成绩高5-15分
+            const suggestedTarget = Math.min(100, currentTotal + Math.floor(Math.random() * 11) + 5);
+            document.getElementById('targetScore').value = suggestedTarget;
+            
+            // 建议训练时间（根据差距调整）
+            const scoreGap = suggestedTarget - currentTotal;
+            const suggestedDays = Math.max(14, Math.min(90, scoreGap * 3));
+            document.getElementById('examDays').value = suggestedDays;
+            
+            // 为各个项目设置合理的目标值
+            if (currentScores.lungCapacity) {
+                const current = currentScores.lungCapacity.value;
+                const target = Math.min(8000, Math.floor(current * 1.1));
+                document.getElementById('targetLungCapacity').value = target;
+            }
+            
+            if (currentScores.sitAndReach) {
+                const current = currentScores.sitAndReach.value;
+                const target = Math.min(50, current + 3);
+                document.getElementById('targetSitAndReach').value = target;
+            }
+            
+            if (currentScores.enduranceRun) {
+                const currentSeconds = currentScores.enduranceRun.value;
+                const targetSeconds = Math.max(180, currentSeconds - 15); // 减少15秒
+                const minutes = Math.floor(targetSeconds / 60);
+                const seconds = targetSeconds % 60;
+                document.getElementById('targetEnduranceRun').value = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            if (currentScores.strengthTest) {
+                const current = currentScores.strengthTest.value;
+                const target = Math.min(100, Math.floor(current * 1.2));
+                document.getElementById('targetStrengthTest').value = target;
+            }
+            
+            if (currentScores.standingJump) {
+                const current = currentScores.standingJump.value;
+                const target = Math.min(400, Math.floor(current * 1.05));
+                document.getElementById('targetStandingJump').value = target;
+            }
+        }
+
+        function generateTrainingPlan() {
+            // 验证输入
+            const targetScore = document.getElementById('targetScore').value;
+            const examDays = document.getElementById('examDays').value;
+            
+            if (!targetScore || !examDays) {
+                alert('请填写目标成绩和考试时间！');
+                return;
+            }
+            
+            // 显示加载动画
+            document.getElementById('trainingLoading').style.display = 'block';
+            
+            // 模拟生成过程
+            setTimeout(() => {
+                try {
+                    const plan = createTrainingPlan();
+                    displayTrainingPlan(plan);
+                } catch (e) {
+                    console.error(e);
+                    alert('生成训练计划时发生错误，请检查输入后重试。');
+                } finally {
+                    document.getElementById('trainingLoading').style.display = 'none';
+                }
+            }, 600);
+        }
+
+        function createTrainingPlan() {
+            const currentScores = JSON.parse(localStorage.getItem('currentScores') || '{}');
+            const targetScore = parseInt(document.getElementById('targetScore').value);
+            const examDays = parseInt(document.getElementById('examDays').value);
+            
+            // 获取目标值
+            const targets = {
+                lungCapacity: parseInt(document.getElementById('targetLungCapacity').value) || 0,
+                sitAndReach: parseFloat(document.getElementById('targetSitAndReach').value) || 0,
+                enduranceRun: timeToSeconds(document.getElementById('targetEnduranceRun').value) || 0,
+                strengthTest: parseInt(document.getElementById('targetStrengthTest').value) || 0,
+                standingJump: parseInt(document.getElementById('targetStandingJump').value) || 0
+            };
+            
+            // 分析差距
+            const gaps = analyzeGaps(currentScores, targets);
+            
+            // 生成训练计划
+            const plan = {
+                summary: {
+                    totalDays: examDays,
+                    targetScore: targetScore,
+                    currentScore: parseInt(document.getElementById('totalScore').textContent),
+                    phases: calculateTrainingPhases(examDays)
+                },
+                phases: [],
+                dailyPlan: []
+            };
+            
+            // 创建阶段性训练计划（按30%/30%/25%/15%分配天数）
+            const phases = ['基础期', '提升期', '强化期', '冲刺期'];
+            const phaseDayMap = plan.summary.phases; // { base, improvement, intensive, sprint }
+            const daysByPhaseIndex = [phaseDayMap.base, phaseDayMap.improvement, phaseDayMap.intensive, phaseDayMap.sprint];
+
+            for (let i = 0; i < 4; i++) {
+                const phase = {
+                    name: phases[i],
+                    days: daysByPhaseIndex[i],
+                    focus: getPhaseFocus(i, gaps),
+                    training: generatePhaseTraining(i, gaps, targets)
+                };
+                plan.phases.push(phase);
+            }
+            
+            // 生成每日详细计划
+            plan.dailyPlan = generateDailyPlan(plan.phases, examDays);
+            
+            return plan;
+        }
+
+        function analyzeGaps(current, targets) {
+            const gaps = {};
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+            
+            Object.keys(targets).forEach(key => {
+                if (current[key] && targets[key]) {
+                    let gap = 0;
+                    let priority = 'medium';
+                    
+                    switch (key) {
+                        case 'lungCapacity':
+                            gap = targets[key] - current[key].value;
+                            priority = gap > 500 ? 'high' : gap > 200 ? 'medium' : 'low';
+                            break;
+                        case 'sitAndReach':
+                            gap = targets[key] - current[key].value;
+                            priority = gap > 5 ? 'high' : gap > 2 ? 'medium' : 'low';
+                            break;
+                        case 'enduranceRun':
+                            gap = current[key].value - targets[key]; // 时间越短越好
+                            priority = gap > 30 ? 'high' : gap > 15 ? 'medium' : 'low';
+                            break;
+                        case 'strengthTest':
+                            gap = targets[key] - current[key].value;
+                            priority = gap > 10 ? 'high' : gap > 5 ? 'medium' : 'low';
+                            break;
+                        case 'standingJump':
+                            gap = targets[key] - current[key].value;
+                            priority = gap > 20 ? 'high' : gap > 10 ? 'medium' : 'low';
+                            break;
+                    }
+                    
+                    gaps[key] = {
+                        current: current[key].value,
+                        target: targets[key],
+                        gap: gap,
+                        priority: priority
+                    };
+                }
+            });
+            
+            return gaps;
+        }
+
+        function getPhaseFocus(phaseIndex, gaps) {
+            const highPriorityItems = Object.keys(gaps).filter(key => gaps[key].priority === 'high');
+            const mediumPriorityItems = Object.keys(gaps).filter(key => gaps[key].priority === 'medium');
+            
+            switch (phaseIndex) {
+                case 0: return '基础体能建设，技术动作规范';
+                case 1: return highPriorityItems.length > 0 ? `重点突破: ${highPriorityItems.join('、')}` : '综合能力提升';
+                case 2: return '专项强化，弱点针对性训练';
+                case 3: return '状态调整，模拟测试';
+                default: return '综合训练';
+            }
+        }
+
+        function generatePhaseTraining(phaseIndex, gaps, targets) {
+            const training = [];
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+
+            // 基础训练项目（每天固定）
+            const baseTraining = [
+                { item: '热身：慢跑+动态拉伸', duration: '10分钟', intensity: '轻松', detail: '关节活动+动态拉伸', type: 'warmup' },
+                { item: '整理放松：静态拉伸', duration: '10-15分钟', intensity: '轻松', detail: '下肢、髋屈肌、背部', type: 'cooldown' }
+            ];
+
+            // 所有体测项目，保证覆盖
+            const allItems = ['sprint50', 'enduranceRun', 'lungCapacity', 'sitAndReach', 'standingJump', 'strengthTest'];
+
+            // 根据阶段和差距生成专项训练，若无差距也安排基础训练，保证覆盖
+            allItems.forEach(key => {
+                const gap = gaps[key] || { priority: 'medium' };
+                // 高优先级项目在所有阶段都安排；中优先级从提升期开始加强；低优先级在基础期安排基础练习
+                const shouldInclude = gap.priority === 'high' || (phaseIndex >= 1 && gap.priority === 'medium') || phaseIndex === 0;
+                if (shouldInclude) {
+                    training.push(...getSpecificTraining(key, gap, phaseIndex, gender));
+                }
+            });
+
+            return [...baseTraining, ...training];
+        }
+
+        function getSpecificTraining(item, gap, phaseIndex, gender) {
+            const trainings = [];
+            const intensity = getTrainingIntensity(phaseIndex);
+
+            // 阶段强度系数：基础期(0)→提升期(1)→强化期(2)→冲刺期(3)
+            const phaseFactor = [0.9, 1.0, 1.1, 0.95][phaseIndex];
+            const restSec = (base) => `${Math.round(base * phaseFactor)}秒`;
+
+            switch (item) {
+                case 'sprint50':
+                    trainings.push(
+                        { item: '起跑练习（蹲踞式）', duration: '8×20米', intensity: intensity, detail: `专注反应与第一步爆发，组间休息${restSec(60)}`, type: 'sprint' },
+                        { item: '加速跑', duration: '6×30米', intensity: intensity, detail: `逐步提速至90%，组间休息${restSec(75)}`, type: 'sprint' },
+                        { item: '全力冲刺', duration: '4×50米', intensity: phaseIndex === 3 ? '考试配速' : '高强度', detail: `95-100%强度，组间休息${restSec(90)}`, type: 'sprint' }
+                    );
+                    break;
+                case 'enduranceRun':
+                    trainings.push(
+                        { item: '有氧基础跑', duration: gender === 'male' ? '1×3000米或20-30分钟' : '1×2500米或18-28分钟', intensity: '中等', detail: '心率保持在最大心率的60-70%', type: 'endurance' },
+                        { item: '间歇跑', duration: gender === 'male' ? '6×400米' : '6×300米', intensity: phaseIndex === 3 ? '考试配速' : '高强度', detail: `配速接近考试配速，组间慢走${restSec(90)}`, type: 'endurance' },
+                        { item: '节奏跑', duration: gender === 'male' ? '2×1200米' : '2×800米', intensity: '中高', detail: `略快于考试配速，组间休息${restSec(180)}`, type: 'endurance' }
+                    );
+                    break;
+                case 'lungCapacity':
+                    trainings.push(
+                        { item: '深呼吸训练', duration: '3组×10次', intensity: '中等', detail: '腹式呼吸，吸气4秒、屏息2秒、呼气6秒', type: 'respiratory' },
+                        { item: '吹气训练（气球/吹管）', duration: '4组×30秒', intensity: '中等', detail: '稳定且持续的呼气，组间休息30秒', type: 'respiratory' },
+                        { item: '有氧活动（慢跑/骑行）', duration: '20-30分钟', intensity: intensity, detail: '均匀呼吸，保持交流强度', type: 'respiratory' }
+                    );
+                    break;
+                case 'sitAndReach':
+                    trainings.push(
+                        { item: '动态拉伸', duration: '3组×12次', intensity: '轻松', detail: '腿部摆动、髋屈肌激活', type: 'flexibility' },
+                        { item: '坐位体前屈专项', duration: '4组×30秒', intensity: '中等', detail: '逐步加深幅度，每组间休息20秒', type: 'flexibility' },
+                        { item: '静态拉伸（腘绳肌/小腿）', duration: '3组×30秒', intensity: '轻松', detail: '每次保持稳定呼吸', type: 'flexibility' }
+                    );
+                    break;
+                case 'standingJump':
+                    trainings.push(
+                        { item: '下肢力量：深蹲', duration: '4组×10次', intensity: '中高', detail: `体重或轻负重，组间休息${restSec(60)}`, type: 'jump' },
+                        { item: '爆发力：跳箱', duration: '4组×8次', intensity: '高强度', detail: `高箱跳，强调快速离地，组间休息${restSec(75)}`, type: 'jump' },
+                        { item: '技术练习：立定跳远', duration: '6组×3次', intensity: intensity, detail: `助力摆臂+协调落地，组间休息${restSec(60)}`, type: 'jump' }
+                    );
+                    break;
+                case 'strengthTest':
+                    if (gender === 'male') {
+                        trainings.push(
+                            { item: '引体向上分组', duration: '5组×尽力', intensity: '高强度', detail: `每组做到力竭，组间休息${restSec(90)}`, type: 'strength' },
+                            { item: '辅助：弹力带引体', duration: '3组×8-12次', intensity: '中高', detail: '控制节奏，上下2-3秒', type: 'strength' },
+                            { item: '核心：悬垂举腿', duration: '4组×10次', intensity: '中等', detail: '稳定核心，避免摆动', type: 'strength' }
+                        );
+                    } else {
+                        trainings.push(
+                            { item: '仰卧起坐分组', duration: '5组×20-30次', intensity: '中高', detail: `均匀呼吸，组间休息${restSec(60)}`, type: 'strength' },
+                            { item: '核心稳定：平板支撑', duration: '4组×40-60秒', intensity: '中等', detail: '保持躯干稳定', type: 'strength' },
+                            { item: '上肢力量：俯卧撑', duration: '4组×12-15次', intensity: '中高', detail: '控制节奏，上下2-3秒', type: 'strength' }
+                        );
+                    }
+                    break;
+            }
+
+            return trainings;
+        }
+
+        function getTrainingIntensity(phaseIndex) {
+            switch (phaseIndex) {
+                case 0: return '低强度'; // 基础期：低强度，重点掌握技术动作
+                case 1: return '中等';   // 提升期：中等强度，增加训练量
+                case 2: return '高强度'; // 强化期：高强度，接近考试标准
+                case 3: return '考试配速'; // 冲刺期：模拟考试/考试配速
+                default: return '中等';
+            }
+        }
+
+        function generateDailyPlan(phases, totalDays) {
+            const dailyPlan = [];
+            let currentDay = 1;
+            const gender = document.querySelector('input[name="gender"]:checked')?.value || 'male';
+            
+            phases.forEach((phase, phaseIndex) => {
+                for (let day = 1; day <= phase.days; day++) {
+                    const plan = {
+                        day: currentDay,
+                        phase: phase.name,
+                        date: new Date(Date.now() + (currentDay - 1) * 24 * 60 * 60 * 1000).toLocaleDateString(),
+                        training: [],
+                        rest: false
+                    };
+
+                    // 每7天安排1天休息
+                    if (currentDay % 7 === 0) {
+                        plan.rest = true;
+                        plan.training = [
+                            { item: '轻松散步', duration: '30分钟', intensity: '轻松', detail: '全身放松' },
+                            { item: '拉伸放松', duration: '20分钟', intensity: '轻松', detail: '下肢+背部' }
+                        ];
+                    } else {
+                        // 冲刺期每3-4天加入一次模拟体测（含50米冲刺、耐力跑配速测试、立定跳远单次最大、力量项目计次）
+                        const isSprintPhase = phase.name === '冲刺期';
+                        const isMockTestDay = isSprintPhase && ((day % 3 === 0) || (day % 4 === 0));
+
+                        if (isMockTestDay) {
+                            plan.training = [
+                                { item: '模拟体测：50米冲刺', duration: '2×50米', intensity: '高强度', detail: '计时，记录最佳' },
+                                { item: '模拟体测：耐力跑配速', duration: gender === 'male' ? '1×1000米' : '1×800米', intensity: '中高', detail: '接近考试配速' },
+                                { item: '模拟体测：立定跳远', duration: '3次', intensity: '中高', detail: '记录最远' },
+                                { item: gender === 'male' ? '模拟体测：引体向上' : '模拟体测：仰卧起坐', duration: gender === 'male' ? '尽力1组' : '1分钟计次', intensity: '高强度', detail: '记录成绩' }
+                            ];
+                        } else {
+                            // 根据阶段重点安排训练
+                            plan.training = generateDayTraining(phase, day, phaseIndex);
+                        }
+                    }
+
+                    dailyPlan.push(plan);
+                    currentDay++;
+                }
+            });
+            
+            return dailyPlan;
+        }
+
+        function generateDayTraining(phase, day, phaseIndex) {
+            const training = [];
+
+            // 热身
+            training.push(
+                { item: '热身：慢跑+关节活动', duration: '10分钟', intensity: '轻松', detail: '踝、膝、髋、肩', type: 'warmup' },
+                { item: '动态拉伸', duration: '10分钟', intensity: '轻松', detail: '摆腿、弓步扭转', type: 'warmup' }
+            );
+
+            // 根据阶段添加主要训练内容
+            const mainTraining = phase.training.filter(item => 
+                (item.type ? (item.type !== 'warmup' && item.type !== 'cooldown') : (!item.item.includes('热身') && !item.item.includes('拉伸')))
+            );
+
+            // 按类型分组，确保每天覆盖不同项目
+            const typeOrder = ['sprint', 'endurance', 'jump', 'strength', 'flexibility', 'respiratory'];
+            const rotatedOrder = [...typeOrder.slice(((day - 1) % typeOrder.length)), ...typeOrder.slice(0, ((day - 1) % typeOrder.length))];
+
+            const byType = new Map();
+            mainTraining.forEach(t => {
+                const typeKey = t.type || 'other';
+                if (!byType.has(typeKey)) byType.set(typeKey, []);
+                byType.get(typeKey).push(t);
+            });
+
+            const selected = [];
+            for (const type of rotatedOrder) {
+                if (selected.length >= 3) break;
+                const list = byType.get(type);
+                if (list && list.length > 0) {
+                    selected.push(list[0]);
+                    list.shift();
+                }
+            }
+
+            // 若不足3项，补充其它类型（避免重复类型）
+            if (selected.length < 3) {
+                const remaining = [].concat(...Array.from(byType.values()));
+                for (const t of remaining) {
+                    if (selected.length >= 3) break;
+                    if (!selected.some(s => (s.type || 'other') === (t.type || 'other'))) {
+                        selected.push(t);
+                    }
+                }
+            }
+
+            training.push(...selected);
+
+            // 整理放松
+            training.push(
+                { item: '静态拉伸', duration: '10-15分钟', intensity: '轻松', detail: '腘绳肌/小腿/髋屈肌', type: 'cooldown' }
+            );
+
+            return training.map(t => ({ ...t }));
+        }
+
+        function calculateTrainingPhases(totalDays) {
+            return {
+                base: Math.floor(totalDays * 0.3),      // 基础期 30%
+                improvement: Math.floor(totalDays * 0.3), // 提升期 30%
+                intensive: Math.floor(totalDays * 0.25),  // 强化期 25%
+                sprint: totalDays - Math.floor(totalDays * 0.85) // 冲刺期 15%
+            };
+        }
+
+        function displayTrainingPlan(plan) {
+            const trainingResults = document.getElementById('trainingResults');
+            const summary = document.getElementById('trainingPlanSummary');
+            const details = document.getElementById('trainingPlanDetails');
+            
+            // 显示训练计划结果
+            trainingResults.style.display = 'block';
+            
+            // 显示总结信息
+            summary.innerHTML = `
+                <div style="font-size: 1.2em; margin-bottom: 15px;">
+                    📈 当前成绩: <strong>${plan.summary.currentScore}分</strong> → 目标成绩: <strong>${plan.summary.targetScore}分</strong>
+                </div>
+                <div style="font-size: 1.1em; margin-bottom: 15px;">
+                    ⏱️ 训练周期: <strong>${plan.summary.totalDays}天</strong>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-top: 20px;">
+                    <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 0.9em;">基础期</div>
+                        <div style="font-size: 1.2em; font-weight: bold;">${plan.summary.phases.base}天</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 0.9em;">提升期</div>
+                        <div style="font-size: 1.2em; font-weight: bold;">${plan.summary.phases.improvement}天</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 0.9em;">强化期</div>
+                        <div style="font-size: 1.2em; font-weight: bold;">${plan.summary.phases.intensive}天</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 0.9em;">冲刺期</div>
+                        <div style="font-size: 1.2em; font-weight: bold;">${plan.summary.phases.sprint}天</div>
+                    </div>
+                </div>
+            `;
+            
+            // 显示详细训练计划
+            details.innerHTML = '';
+            
+            // 显示阶段总结
+            plan.phases.forEach(phase => {
+                const phaseDiv = document.createElement('div');
+                phaseDiv.className = 'suggestions';
+                phaseDiv.style.marginBottom = '20px';
+                phaseDiv.innerHTML = `
+                    <h4 style="color: #2d3748; margin-bottom: 15px; font-size: 1.2em;">
+                        📊 ${phase.name} (${phase.days}天)
+                    </h4>
+                    <p style="margin-bottom: 15px; color: #4a5568;">
+                        <strong>训练重点:</strong> ${phase.focus}
+                    </p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                        ${phase.training.map(item => `
+                            <div style="background: #f7fafc; padding: 12px; border-radius: 8px; border-left: 4px solid #4facfe;">
+                                <div style="font-weight: 600; color: #2d3748;">${item.item}</div>
+                                <div style="font-size: 0.9em; color: #718096;">${item.duration} | ${item.intensity}</div>
+                                ${item.detail ? `<div style="font-size: 0.85em; color: #A0AEC0; margin-top: 4px;">${item.detail}</div>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                details.appendChild(phaseDiv);
+            });
+            
+            // 显示每日详细计划（前7天和后7天）
+            const dailyPlanDiv = document.createElement('div');
+            dailyPlanDiv.className = 'suggestions';
+            dailyPlanDiv.innerHTML = `
+                <h4 style="color: #2d3748; margin-bottom: 15px; font-size: 1.2em;">
+                    📅 详细训练安排
+                </h4>
+                <div style="max-height: 400px; overflow-y: auto;">
+                    ${plan.dailyPlan.slice(0, 14).map(day => `
+                        <div style="background: ${day.rest ? '#f0fff4' : '#f7fafc'}; padding: 15px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid ${day.rest ? '#48bb78' : '#4facfe'};">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <div style="font-weight: 600; color: #2d3748;">
+                                    第${day.day}天 - ${day.phase}
+                                </div>
+                                <div style="font-size: 0.9em; color: #718096;">${day.date}</div>
+                                ${day.rest ? '<span style="background: #48bb78; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.8em;">休息日</span>' : ''}
+                            </div>
+                            <div style="display: grid; gap: 8px;">
+                                ${day.training.map(item => `
+                                    <div style="display: grid; grid-template-columns: 1.2fr 0.8fr 1fr; gap: 8px; align-items: center; padding: 8px; background: white; border-radius: 6px;">
+                                        <span style="color: #2d3748;">${item.item}</span>
+                                        <span style="font-size: 0.9em; color: #718096;">${item.duration} | ${item.intensity}</span>
+                                        ${item.detail ? `<span style="font-size: 0.85em; color: #A0AEC0;">${item.detail}</span>` : '<span></span>'}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                ${plan.dailyPlan.length > 14 ? `
+                    <div style="text-align: center; margin-top: 15px;">
+                        <button onclick="showFullPlan()" class="btn" style="padding: 10px 20px; font-size: 14px;">
+                            查看完整${plan.dailyPlan.length}天计划
+                        </button>
+                    </div>
+                ` : ''}
+            `;
+            details.appendChild(dailyPlanDiv);
+            
+            // 保存训练计划到本地存储
+            localStorage.setItem('trainingPlan', JSON.stringify(plan));
+            
+            // 保存到历史记录
+            saveTrainingPlanHistory(plan);
+            
+            // 滚动到训练计划结果
+            trainingResults.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function showFullPlan() {
+            const plan = JSON.parse(localStorage.getItem('trainingPlan'));
+            const details = document.getElementById('trainingPlanDetails');
+            
+            // 替换为完整计划
+            const fullPlanDiv = document.createElement('div');
+            fullPlanDiv.className = 'suggestions';
+            fullPlanDiv.innerHTML = `
+                <h4 style="color: #2d3748; margin-bottom: 15px; font-size: 1.2em;">
+                    📅 完整训练安排 (${plan.dailyPlan.length}天)
+                </h4>
+                <div style="max-height: 600px; overflow-y: auto;">
+                    ${plan.dailyPlan.map(day => `
+                        <div style="background: ${day.rest ? '#f0fff4' : '#f7fafc'}; padding: 15px; margin-bottom: 8px; border-radius: 10px; border-left: 4px solid ${day.rest ? '#48bb78' : '#4facfe'};">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <div style="font-weight: 600; color: #2d3748;">
+                                    第${day.day}天 - ${day.phase}
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="font-size: 0.9em; color: #718096;">${day.date}</div>
+                                    ${day.rest ? '<span style="background: #48bb78; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.8em;">休息日</span>' : ''}
+                                </div>
+                            </div>
+                            <div style="display: grid; gap: 6px;">
+                                ${day.training.map(item => `
+                                    <div style="display: grid; grid-template-columns: 1.2fr 0.8fr 1fr; gap: 8px; align-items: center; padding: 6px 8px; background: white; border-radius: 5px; font-size: 0.95em;">
+                                        <span style="color: #2d3748;">${item.item}</span>
+                                        <span style="color: #718096;">${item.duration} | ${item.intensity}</span>
+                                        ${item.detail ? `<span style="font-size: 0.85em; color: #A0AEC0;">${item.detail}</span>` : '<span></span>'}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            // 替换现有的每日计划部分
+            const existingDailyPlan = details.querySelector('.suggestions:last-child');
+            if (existingDailyPlan) {
+                details.replaceChild(fullPlanDiv, existingDailyPlan);
+            }
+        }
+
+        function exportTrainingPlan() {
+            const plan = JSON.parse(localStorage.getItem('trainingPlan'));
+            if (!plan) {
+                alert('没有可导出的训练计划！');
+                return;
+            }
+            
+            // 创建导出内容
+            let exportContent = `个性化体测训练计划\n`;
+            exportContent += `==================\n\n`;
+            exportContent += `📈 成绩目标: ${plan.summary.currentScore}分 → ${plan.summary.targetScore}分\n`;
+            exportContent += `⏱️ 训练周期: ${plan.summary.totalDays}天\n`;
+            exportContent += `📊 训练阶段: 基础期${plan.summary.phases.base}天 → 提升期${plan.summary.phases.improvement}天 → 强化期${plan.summary.phases.intensive}天 → 冲刺期${plan.summary.phases.sprint}天\n\n`;
+            
+            // 添加每日计划
+            exportContent += `📅 详细训练安排:\n`;
+            exportContent += `-------------------\n\n`;
+            
+            plan.dailyPlan.forEach(day => {
+                exportContent += `第${day.day}天 (${day.date}) - ${day.phase}`;
+                if (day.rest) exportContent += ` [休息日]`;
+                exportContent += `\n`;
+                
+                day.training.forEach(item => {
+                    exportContent += `  • ${item.item} (${item.duration}, ${item.intensity}${item.detail ? ', ' + item.detail : ''})\n`;
+                });
+                exportContent += `\n`;
+            });
+            
+            // 创建下载链接
+            const blob = new Blob([exportContent], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `体测训练计划_${new Date().toLocaleDateString()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('训练计划已导出！');
+        }
+
+        function printTrainingPlan() {
+            const plan = JSON.parse(localStorage.getItem('trainingPlan'));
+            if (!plan) {
+                alert('没有可打印的训练计划！');
+                return;
+            }
+            
+            // 创建打印窗口
+            const printWindow = window.open('', '_blank', 'width=800,height=600');
+            
+            let printContent = `
+                <html>
+                <head>
+                    <title>体测训练计划</title>
+                    <style>
+                        body { font-family: 'Microsoft YaHei', Arial, sans-serif; margin: 20px; }
+                        .header { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; text-align: center; }
+                        .section { background: #f7fafc; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+                        .day-plan { background: white; padding: 10px; margin-bottom: 8px; border-radius: 6px; border-left: 4px solid #4facfe; }
+                        .rest-day { border-left-color: #48bb78; background: #f0fff4; }
+                        @media print { body { margin: 10px; } .no-print { display: none; } }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>🏃‍♂️ 个性化体测训练计划</h1>
+                        <p>成绩目标: ${plan.summary.currentScore}分 → ${plan.summary.targetScore}分 | 训练周期: ${plan.summary.totalDays}天</p>
+                    </div>
+            `;
+            
+            // 添加每日计划
+            printContent += `<div class="section"><h2>📅 详细训练安排</h2>`;
+            
+            plan.dailyPlan.forEach(day => {
+                printContent += `
+                    <div class="day-plan ${day.rest ? 'rest-day' : ''}">
+                        <strong>第${day.day}天 (${day.date}) - ${day.phase}${day.rest ? ' [休息日]' : ''}</strong><br>
+                `;
+                
+                day.training.forEach(item => {
+                    printContent += `• ${item.item} (${item.duration}, ${item.intensity}${item.detail ? ', ' + item.detail : ''})<br>`;
+                });
+                
+                printContent += `</div>`;
+            });
+            
+            printContent += `
+                    </div>
+                    <div class="no-print" style="text-align: center; margin-top: 20px;">
+                        <button onclick="window.print()" style="background: #4facfe; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">🖨️ 打印</button>
+                        <button onclick="window.close()" style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-left: 10px;">关闭</button>
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            printWindow.document.write(printContent);
+            printWindow.document.close();
+        }
+
+        // 保存训练计划历史记录
+        function saveTrainingPlanHistory(plan) {
+            const history = JSON.parse(localStorage.getItem('trainingPlanHistory') || '[]');
+            const newPlan = {
+                id: Date.now(),
+                createdAt: new Date().toLocaleString(),
+                summary: plan.summary,
+                dailyPlan: plan.dailyPlan.slice(0, 7) // 只保存前7天的详细信息
+            };
+            
+            history.unshift(newPlan); // 最新计划在前
+            
+            // 只保留最近10个计划
+            if (history.length > 10) {
+                history.splice(10);
+            }
+            
+            localStorage.setItem('trainingPlanHistory', JSON.stringify(history));
+        }
+
+        // 显示训练计划历史
+        function showTrainingPlanHistory() {
+            const history = JSON.parse(localStorage.getItem('trainingPlanHistory') || '[]');
+            
+            if (history.length === 0) {
+                alert('暂无训练计划历史记录！');
+                return;
+            }
+            
+            let historyContent = `
+                <div style="max-width: 600px; margin: 0 auto; background: white; border-radius: 15px; padding: 25px;">
+                    <h2 style="color: #2d3748; margin-bottom: 20px; text-align: center;">📚 训练计划历史</h2>
+                    <div style="max-height: 400px; overflow-y: auto;">
+            `;
+            
+            history.forEach(plan => {
+                historyContent += `
+                    <div style="background: #f7fafc; padding: 15px; margin-bottom: 15px; border-radius: 10px; border-left: 4px solid #4facfe;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <strong style="color: #2d3748;">${plan.createdAt}</strong>
+                            <span style="background: #4facfe; color: white; padding: 4px 12px; border-radius: 15px; font-size: 0.9em;">
+                                ${plan.summary.totalDays}天计划
+                            </span>
+                        </div>
+                        <div style="color: #4a5568; margin-bottom: 8px;">
+                            成绩目标: ${plan.summary.currentScore}分 → ${plan.summary.targetScore}分
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <button onclick="loadTrainingPlan(${plan.id})" style="background: #4facfe; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 0.9em;">
+                                加载计划
+                            </button>
+                            <button onclick="deleteTrainingPlan(${plan.id})" style="background: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 0.9em;">
+                                删除
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            historyContent += `
+                    </div>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button onclick="document.getElementById('historyModal').remove()" style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+                            关闭
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // 创建模态框
+            const modal = document.createElement('div');
+            modal.id = 'historyModal';
+            modal.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                background: rgba(0,0,0,0.5); z-index: 1000; display: flex; 
+                align-items: center; justify-content: center;
+            `;
+            modal.innerHTML = historyContent;
+            
+            document.body.appendChild(modal);
+            
+            // 点击背景关闭
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+        }
+
+        // 加载历史训练计划
+        function loadTrainingPlan(planId) {
+            const history = JSON.parse(localStorage.getItem('trainingPlanHistory') || '[]');
+            const plan = history.find(p => p.id === planId);
+            
+            if (plan) {
+                // 从完整计划中恢复
+                const fullPlan = JSON.parse(localStorage.getItem('trainingPlan'));
+                if (fullPlan && fullPlan.summary.createdAt === plan.createdAt) {
+                    displayTrainingPlan(fullPlan);
+                    document.getElementById('historyModal').remove();
+                    document.getElementById('trainingResults').scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    alert('无法加载完整的训练计划，请重新生成！');
+                }
+            }
+        }
+
+        // 删除历史训练计划
+        function deleteTrainingPlan(planId) {
+            if (confirm('确定要删除这个训练计划吗？')) {
+                let history = JSON.parse(localStorage.getItem('trainingPlanHistory') || '[]');
+                history = history.filter(p => p.id !== planId);
+                localStorage.setItem('trainingPlanHistory', JSON.stringify(history));
+                showTrainingPlanHistory(); // 刷新历史记录显示
+            }
+        }
+    </script>
+    </script>
+    
+    <!-- 页脚版权信息 -->
+    <div style="text-align: center; padding: 20px; color: rgba(255,255,255,0.8); font-size: 14px;">
+        &copy; 2025 周灼霖 1328940285@qq.com
+    </div>
+</body>
+</html>
+</body>
+</html>
+
